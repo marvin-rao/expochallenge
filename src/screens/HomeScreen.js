@@ -2,10 +2,13 @@ import React, { useCallback, useEffect, useState } from "react";
 import { StatusBar } from "expo-status-bar";
 import { FlatList, Pressable, StyleSheet, Text, View } from "react-native";
 import { API } from "../axios";
+import JokeCard from "../components/JokeCard";
+import SearchInput from "../components/SearchInput";
 
 const HomeScreen = ({ navigation }) => {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [searchResults, setSearchResults] = useState([]);
 
   const loadJokes = useCallback(async () => {
     setLoading(true);
@@ -21,6 +24,17 @@ const HomeScreen = ({ navigation }) => {
     }
   }, []);
 
+  const searchJokes = useCallback(async (query) => {
+    try {
+      const result = await API.get(`/jokes/search?query=${query}`);
+      if (result.status === 200) {
+        setSearchResults(result.data.result);
+      }
+    } catch (e) {
+      console.log("loadJokesError", e);
+    }
+  }, []);
+
   useEffect(() => {
     loadJokes();
   }, [loadJokes]);
@@ -33,6 +47,10 @@ const HomeScreen = ({ navigation }) => {
     );
   };
 
+  const renderJoke = ({ item }) => {
+    return <JokeCard data={item} />;
+  };
+
   return (
     <View style={styles.container}>
       <StatusBar style="auto" />
@@ -43,8 +61,27 @@ const HomeScreen = ({ navigation }) => {
       )}
       {!loading && (
         <View style={styles.container}>
-          <Text style={styles.title}>Chuck Norris Jokes</Text>
-          <FlatList style={styles.flatlist} data={categories} renderItem={renderItem} />
+          <View style={styles.smallBanner}>
+            <Text style={styles.title}>Chuck Norris Jokes</Text>
+            <SearchInput
+              onClear={() => {
+                setSearchResults([]);
+              }}
+              onSearch={(v) => searchJokes(v)}
+            />
+          </View>
+          {searchResults.length > 0 && (
+            <FlatList
+              ListHeaderComponent={() => {
+                return <Text style={{ paddingVertical: 6 }}>Search Results</Text>;
+              }}
+              style={styles.searchflatlist}
+              data={searchResults}
+              renderItem={renderJoke}
+              keyboardDismissMode="on-drag"
+            />
+          )}
+          {searchResults.length === 0 && <FlatList style={styles.flatlist} data={categories} renderItem={renderItem} />}
         </View>
       )}
     </View>
@@ -57,8 +94,9 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
   },
   title: {
-    padding: 20,
+    paddingHorizontal: 20,
     fontSize: 20,
+    paddingBottom: 10,
   },
   item: {
     flex: 1,
@@ -71,9 +109,15 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingBottom: 50,
   },
+  searchflatlist: {
+    flex: 1,
+    paddingBottom: 50,
+    paddingHorizontal: 20,
+  },
   itemText: {
     textTransform: "capitalize",
     paddingHorizontal: 14,
+    fontSize: 18,
   },
   loading: {
     alignContent: "center",
@@ -82,6 +126,18 @@ const styles = StyleSheet.create({
   },
   loadingText: {
     textAlign: "center",
+  },
+  search: {
+    paddingVertical: 4,
+    marginHorizontal: 12,
+    borderRadius: 10,
+    paddingHorizontal: 8,
+    backgroundColor: "rgba(0, 0, 0, 0.1)",
+  },
+  smallBanner: {
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: "#ccc",
+    paddingVertical: 12,
   },
 });
 

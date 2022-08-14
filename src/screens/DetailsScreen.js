@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View } from "react-native";
 import { API } from "../axios";
-import moment from "moment";
+import JokeCard from "../components/JokeCard";
 
 const DetailsScreen = ({ route }) => {
   const [joke, setJoke] = useState({});
@@ -27,8 +27,6 @@ const DetailsScreen = ({ route }) => {
     loadJoke();
   }, [loadJoke]);
 
-  const { value, created_at } = joke;
-
   return (
     <View style={styles.container}>
       <StatusBar style="auto" />
@@ -42,20 +40,7 @@ const DetailsScreen = ({ route }) => {
       {!loading && (
         <View style={styles.container}>
           <Text style={styles.title}>Chuck Norris Jokes</Text>
-          <View style={styles.card}>
-            <Text style={styles.joke}>{value}</Text>
-            <Text style={styles.categories}>Categories</Text>
-            {joke?.categories?.map((c) => {
-              return (
-                <Text key={c} style={styles.category}>
-                  {c + " "}
-                </Text>
-              );
-            })}
-            <View style={styles.footer}>
-              <Text style={styles.created}>{moment(created_at).fromNow()}</Text>
-            </View>
-          </View>
+          <JokeCard data={joke} />
         </View>
       )}
     </View>
