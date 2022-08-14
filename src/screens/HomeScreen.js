@@ -65,6 +65,7 @@ const styles = StyleSheet.create({
     borderBottomColor: "#ccc",
     borderBottomWidth: 1,
     padding: 10,
+    paddingVertical: 20,
   },
   flatlist: {
     flex: 1,
