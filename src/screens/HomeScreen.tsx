@@ -44,7 +44,9 @@ const HomeScreen:React.FC<HomeScreenProps> = ({ navigation }) => {
 
   const renderItem = ({ item }) => {
     return (
-      <Pressable onPress={() => navigation.navigate("Details", { category: item })} style={styles.item}>
+      <Pressable onPress={() => {
+        navigation.navigate("DetailsScreen", { category: item });
+      }} style={styles.item}>
         <Text style={styles.itemText}>{item}</Text>
       </Pressable>
     );

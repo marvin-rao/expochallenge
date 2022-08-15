@@ -2,7 +2,7 @@ import { NativeStackNavigationProp, NativeStackScreenProps } from "@react-naviga
 
 export type RootStackParamList = {
     HomeScreen: undefined;
-    DetailsScreen: undefined;
+    DetailsScreen: { category: string };
 };
 
 export type NavigationProp<
