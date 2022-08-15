@@ -2,7 +2,11 @@ import moment from "moment";
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 
-const JokeCard = ({ data }) => {
+export interface JokeCardProps {
+  data?:any
+}
+
+const JokeCard:React.FC<JokeCardProps> = ({ data }) => {
   const { value, created_at, categories } = data;
   return (
     <View style={styles.card}>

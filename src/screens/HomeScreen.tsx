@@ -4,8 +4,11 @@ import { FlatList, Pressable, StyleSheet, Text, View } from "react-native";
 import { API } from "../axios";
 import JokeCard from "../components/JokeCard";
 import SearchInput from "../components/SearchInput";
+import {NativeStackScreenProp} from '../navigation';
 
-const HomeScreen = ({ navigation }) => {
+interface HomeScreenProps extends NativeStackScreenProp<'HomeScreen'> {}
+
+const HomeScreen:React.FC<HomeScreenProps> = ({ navigation }) => {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(false);
   const [searchResults, setSearchResults] = useState([]);

@@ -3,10 +3,15 @@ import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View } from "react-native";
 import { API } from "../axios";
 import JokeCard from "../components/JokeCard";
+import { NativeStackScreenProp } from "../navigation";
 
-const DetailsScreen = ({ route }) => {
+export interface DetailsScreenProps extends NativeStackScreenProp<'DetailsScreen'> {}
+
+const DetailsScreen:React.FC<DetailsScreenProps> = ({route}) => {
   const [joke, setJoke] = useState({});
   const [loading, setLoading] = useState(false);
+  
+  // @ts-ignore
   const { category } = route.params;
 
   const loadJoke = useCallback(async () => {

@@ -2,16 +2,21 @@ import React, { useCallback } from "react";
 import { Keyboard, StyleSheet, TextInput, View } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 
-const SearchInput = ({ onSearch, onClear }) => {
-  const textInputRef = React.useRef();
+export interface SearchInputProps {
+  onSearch?:(query:string)=>void,
+  onClear?:()=>void
+}
+
+const SearchInput:React.FC<SearchInputProps> = ({ onSearch, onClear }) => {
+  const textInputRef = React.useRef(null);
   const [text, setText] = React.useState("");
 
   const clear = useCallback(() => {
     onClear();
-    textInputRef.current.clear();
-    setText("");
-    Keyboard.dismiss();
-  });
+      textInputRef.current.clear();
+      setText("");
+      Keyboard.dismiss();
+  }, []);
 
   return (
     <View style={styles.root}>
